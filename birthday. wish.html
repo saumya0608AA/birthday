@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday Animation</title>
+
+
+<!-- ========== Google Fonts ========== -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+
+<!-- ========== GSAP & Confetti CDN ========== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js" defer></script>
+
+
+<style>
+/* ------------------ Global Reset ------------------ */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow-x:hidden;height:100%;font-family:'Poppins',Arial,sans-serif;background:#f9f6ff;color:#d81b60;}
+
+
+/* ------------------ Variables ------------------ */
+:root{
+  --pink:#ff4d6d;
+  --white:#ffffff;
+  --red:#ff4081;
+  --green:#2ecc71;
+  --blue:#42d6ff;
+  --dark:#2a2a2a;
+}
+
+
+/* ------------------ Balloon Animation ------------------ */
+#balloon-container{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:10;}
+.balloon{
+  position:absolute;bottom:-150px;width:60px;height:80px;border-radius:50% 50% 45% 45%;
+  animation:floatUp linear infinite;
+}
+.balloon::after{
+  content:'';position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);
+  width:2px;height:18px;background:var(--dark);
+}
+@keyframes floatUp{
+  from{transform:translateY(0) scale(0.9);opacity:1;}
+  to{transform:translateY(-120vh) scale(1.1);opacity:0;}
+}
+
+
+/* ------------------ Cake & Button ------------------ */
+#cake-wrapper{position:fixed;bottom:160px;left:50%;transform:translateX(-50%);z-index:15;}
+#cake-photo{
+  width:200px;border-radius:18px;box-shadow:0 8px 25px rgba(0,0,0,0.15);filter:saturate(1.2) drop-shadow(0 0 6px var(--pink));
+  transition:transform .6s ease;
+}
+#cake-photo:hover{transform:scale(1.05) rotate(-2deg);}
+
+
+#cut-cake-btn{
+  margin-top:20px;padding:12px 28px;font-size:1.1rem;font-weight:600;color:var(--white);
+  background:linear-gradient(135deg,var(--red),var(--pink));border:none;border-radius:30px;
+  cursor:pointer;box-shadow:0 5px 15px rgba(255,64,129,0.4);transition:transform .2s;
+}
+#cut-cake-btn:active{transform:scale(0.96);}
+
+
+/* ------------------ Message Modal ------------------ */
+#birthday-message{
+  display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(90%,700px);background:var(--white);padding:30px;border-radius:18px;
+  box-shadow:0 8px 30px rgba(218,19,109,0.35);z-index:99;text-align:center;
+  color:var(--dark);line-height:1.6;
+}
+#birthday-message h2{font-size:2.2rem;margin-top:0;color:var(--red);}
+#birthday-message p{font-size:1.2rem;margin-bottom:0;}
+
+
+/* ------------------ Accessibility ------------------ */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
+}
+</style>
+ <style>
+.open-me-btn {
+  margin-top: 30px;
+  padding: 14px 38px;
+  font-size: 1.15rem;
+  font-family: 'Poppins', Arial, sans-serif;
+  color: #fff;
+  background: linear-gradient(120deg, var(--blue), var(--pink), var(--red), var(--green));
+  background-size: 220% 220%;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  transition: box-shadow .25s, transform .21s, background-position .8s cubic-bezier(.25,.8,.25,1.2);
+  box-shadow: 0 8px 22px rgba(255,77,109,0.15), 0 1px 0 #fff3f8;
+  font-weight: 700;
+  outline: none;
+  animation: swoopIn .8s cubic-bezier(0.7,-0.1,0.24,1.1);
+}
+.open-me-btn:hover {
+  box-shadow: 0 12px 33px rgba(66,214,255,0.31), 0 2px 0 #fff6fc;
+  transform: scale(1.07) translateY(-2px) rotate(-2deg);
+  background-position: 100% 0;
+}
+@keyframes swoopIn {
+  from {transform: scale(.6) translateY(80px); opacity: 0;}
+  80% {transform: scale(1.1) translateY(-10px);}
+  to {transform: scale(1) translateY(0); opacity: 1;}
+}
+</style>
+</head>
+<body>
+
+
+<!-- Balloon container -->
+<div id="balloon-container" aria-hidden="true"></div>
+
+
+<!-- Cake image & button -->
+<div id="cake-wrapper">
+  <img
+    id="cake-photo"
+    src="https://i.pinimg.com/736x/09/99/41/09994165cba777ba720cefd79a66d726.jpg"
+    alt="Delicious birthday cake with candles"
+  />
+  <button id="cut-cake-btn" aria-label="Cut the Cake">Cut the Cake</button>
+</div>
+
+
+<!-- Birthday message -->
+<div id="birthday-message" role="alert" aria-live="polite">
+  <h2>Happy Birthday Dumbo!</h2>
+  <p>Happiest birthday to my <em>pasandida aurat(AARU)</em>! May your path be bright with love, success, and endless laughter. May every wish take flight like these balloons, and may this new chapter overflow with health, adventure, and unforgettable joy. You deserve the universe—today and always!Love you soo much and i will always take care of you i promice!Thank you so much for being born.you are my bestest part of my lifee once again happy birthday</p><!-- Add this just below the paragraph in #birthday-message -->
+ <button id="open-me-btn" class="open-me-btn">Open Me</button>
+</div>
+
+
+<!-- Background audio -->
+<audio id="birthday-song" src="https://open.spotify.com/track/7vl2u8i60ewUO3UHGmqFp0?si=5b6b7ea9985945c9" preload="auto"></audio>
+
+
+<!-- ========== JavaScript Logic ========== -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+
+  /* ---------- Elements ---------- */
+  const balloonContainer = document.getElementById('balloon-container');
+  const cutBtn           = document.getElementById('cut-cake-btn');
+  const cakePhoto        = document.getElementById('cake-photo');
+  const msgBox           = document.getElementById('birthday-message');
+  const song             = document.getElementById('birthday-song');
+  const jsConfetti       = new JSConfetti();
+
+
+  /* ---------- Utility ---------- */
+  const colors = ['var(--pink)','var(--blue)','var(--green)','var(--red)','var(--white)'];
+
+
+  function createBalloon(){
+    const bal = document.createElement('div');
+    bal.className = 'balloon';
+    bal.style.background = colors[Math.floor(Math.random()*colors.length)];
+    bal.style.left = Math.random()*100 + 'vw';
+    bal.style.animationDuration = (6 + Math.random()*4) + 's';
+    balloonContainer.appendChild(bal);
+
+
+    /* Remove from DOM when animation ends */
+    bal.addEventListener('animationend', ()=>bal.remove());
+  }
+
+
+  /* ---------- Initial Launch: 25 balloons + GSAP intro ---------- */
+  for(let i=0;i<25;i++){ setTimeout(createBalloon,i*250); }
+
+
+  /* GSAP fade-in & wiggle on cake */
+  gsap.from('#cake-wrapper',{y:100,opacity:0,duration:1.2,ease:'back.out(1.7)'});
+  gsap.to('#cake-photo',{rotation:6,yoyo:true,repeat:-1,duration:2,ease:'sine.inOut'});
+
+
+  /* ---------- Autoplay song with interaction fallback ---------- */
+  function playSong(){ song.volume=0.75; song.play().catch(()=>{}); }
+  playSong();
+  document.body.addEventListener('click',playSong,{once:true});
+
+
+  /* ---------- Cut Cake Event ---------- */
+  cutBtn.addEventListener('click',()=>{
+    /* Stop music smoothly */
+    gsap.to(song,{volume:0,duration:1,onComplete:()=>{song.pause();song.currentTime=0;}});
+   
+    /* Confetti blast */
+    jsConfetti.addConfetti({emojis:['🎂','🎉','💖'],confettiColors:colors});
+   
+    /* Button & cake exit */
+    gsap.to('#cake-wrapper',{scale:0.6,opacity:0,y:-40,duration:0.8,ease:'back.in',onComplete:()=>{
+      document.getElementById('cake-wrapper').style.display='none';
+    }});
+   
+    /* Show message */
+    gsap.fromTo(msgBox,{scale:0.5,opacity:0},{display:'block',scale:1,opacity:1,duration:0.9,ease:'back.out(1.7)'});
+   
+    /* Extra balloon burst */
+    for(let i=0;i<60;i++){ setTimeout(createBalloon,i*100); }
+  });
+
+
+});
+// Add this after all existing JS in your <script>
+document.getElementById('open-me-btn').addEventListener('click', function() {
+  window.location.href = "shayari.html";
+});
+
+</script>
+</body>
+</html>
